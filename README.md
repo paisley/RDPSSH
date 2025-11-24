@@ -191,12 +191,16 @@ Application logs are saved to:
 - RDPSSH currently uses `ssh.InsecureIgnoreHostKey()` which **does not verify SSH host keys**
 - This makes the connection vulnerable to man-in-the-middle attacks
 - For production use, implement proper SSH host key verification
-- 
+
+
 ## License
 
-This project is open source. See LICENSE file for details.
+This project is open source and licensed under a modified MIT license with a no-sale clause. See LICENSE file for details.
 
 ## Attribution
+- GUI Built with [Fyne](https://fyne.io/)
+- Uses [golang.org/x/crypto/ssh](https://pkg.go.dev/golang.org/x/crypto/ssh) for SSH client
+- Certificate handling via [golang.org/x/crypto/pkcs12](https://pkg.go.dev/golang.org/x/crypto/pkcs12)
 - Red X Circle Icon: [Delete icons created by Pixel perfect - Flaticon](https://www.flaticon.com/free-icons/delete)
 - Black X Circle Icon: [Delete icons created by Pixel perfect - Flaticon](https://www.flaticon.com/free-icons/delete)
 - Green Check Circle Icon: [Success icons created by hqrloveq - Flaticon](https://www.flaticon.com/free-icons/success)
