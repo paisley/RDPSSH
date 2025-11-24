@@ -15,33 +15,36 @@ BUILD_TIME ?= $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 GITHUB_USER ?= paisley
 GITHUB_REPO ?= rdpssh
-
-LDFLAGS := -ldflags "\
-	-X 'main.AppName=RDPSSH' \
+LDFLAGS_BASE := -X main.AppName=RDPSSH \
 	-X 'main.AppVersion=$(VERSION)' \
 	-X 'main.BuildCommit=$(COMMIT)' \
 	-X 'main.BuildDate=$(BUILD_TIME)' \
 	-X 'main.DocURL=https://github.com/$(GITHUB_USER)/$(GITHUB_REPO)' \
-	-X 'main.IssueURL=https://github.com/$(GITHUB_USER)/$(GITHUB_REPO)/issues'"
+	-X 'main.IssueURL=https://github.com/$(GITHUB_USER)/$(GITHUB_REPO)/issues'
 
 # Normal build (shows a console window)
 LDFLAGS := -ldflags "$(LDFLAGS_BASE)
 
-# Release build: GUI subsystem (no console window)
-GUI_LDFLAGS := -ldflags "-H=windowsgui $(LDFLAGS_BASE)"
+BUILD_DIR := release
+ZIP_NAME := rdpssh-$(VERSION)-windows-amd64.zip
 
-.PHONY: all build clean release
+.PHONY: all build clean release release-zip
 
 # Default target
 all: build
 
 # Build dev/test binary
 build:
-	GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=$(CGO_ENABLED) CC=$(CC) go build $(LDFLAGS) -trimpath -o $(BINARY_NAME) .
+	GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=$(CGO_ENABLED) CC=$(CC) go build -ldflags $(LDFLAGS) -trimpath -o $(BINARY_NAME) .
 
-# Build release binart
+# Build release binary
 release:
-    GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=$(CGO_ENABLED) CC=$(CC) go build $(GUI_LDFLAGS) -trimpath -o $(BINARY_NAME) .
+	GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=$(CGO_ENABLED) CC=$(CC) go build -ldflags "-H=windowsgui $(LDFLAGS_BASE)" -trimpath -o $(BINARY_NAME) .
+
+# Archive release
+release-zip: release
+	mkdir -p $(BUILD_DIR)
+	zip $(BUILD_DIR)/$(ZIP_NAME) $(BINARY_NAME) LICENSE README.md
 
 # Remove build artifact
 clean:
