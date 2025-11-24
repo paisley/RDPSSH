@@ -4,6 +4,8 @@
 
 RDPSSH is a Windows desktop application that simplifies connecting to remote Linux hosts via RDP through an SSH tunnel, using PKCS#12 certificate authentication.
 
+![RDPSSH Screenshot](./screenshot.png)
+
 ## Features
 
 - 🔒 **Certificate-Based SSH Authentication** - Uses P12/PFX certificates instead of passwords
