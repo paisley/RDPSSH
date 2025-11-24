@@ -14,6 +14,8 @@ import (
 	"sync"
 	"time"
 
+	_ "image/png"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
@@ -27,6 +29,7 @@ import (
 	nativeDialog "github.com/sqweek/dialog"
 )
 
+
 var (
 	logWindow fyne.Window
 
@@ -38,6 +41,7 @@ var (
 	disconnectFunc func()
 	isTunnelActive bool
 )
+
 
 // uiWriter redirects log output to the UI log window
 type uiWriter struct {
@@ -64,11 +68,10 @@ func main() {
 	a := app.New()
 	a.Settings().SetTheme(&DarkGreenTheme{})
 
-	var appIcon fyne.Resource
-	if icon, err := fyne.LoadResourceFromPath(IconPathApp); err == nil {
-		appIcon = icon
-		a.SetIcon(icon)
-	}
+    appIcon := embeddedAppIcon
+    if appIcon != nil {
+        a.SetIcon(appIcon)
+    }
 
 	logFilePath := filepath.Join(filepath.Dir(cfgPath), "app.log")
 	logFile, err := os.Create(logFilePath)
@@ -128,9 +131,9 @@ func main() {
 
 	if d, ok := a.(desktop.App); ok {
 		desk = d
-		iconIdle, _ := fyne.LoadResourceFromPath(IconPathIdle)
-		iconConnected, _ := fyne.LoadResourceFromPath(IconPathConnected)
-		iconDisconnected, _ := fyne.LoadResourceFromPath(IconPathDisconnected)
+		iconIdle := embeddedIconIdle
+		iconConnected := embeddedIconConnected
+		iconDisconnected := embeddedIconDisconnected
 
 		if iconIdle == nil {
 			iconIdle = a.Icon()
